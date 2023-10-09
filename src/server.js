@@ -2,13 +2,43 @@ const express = require("express");
 
 const app = express();
 
-// http://localhost:5001/
-// app.use("/", express.static("blank"));
+app.use(express.json());
 
-// http://localhost:5001/example
-app.use("/", express.static("example"));
+app.get("/books", (request, response) => {
+  console.log(request.originalUrl);
+  const book = {
+    title: "lord of the rings",
+    author: "tolkein",
+    genre: "fantasy",
+  };
 
-app.use("/beansontoast", express.static("beansontoast"));
+  const successResponse = {
+    message: "success",
+    book: book,
+  };
+
+  response.send(successResponse);
+});
+
+app.post("/books", (request, response) => {
+  console.log(request.body.title);
+  const newBook = {
+    title: request.body.title,
+    author: request.body.author,
+    genre: request.body.genre,
+  };
+
+  // create a book on the db(
+  //  title: request.body.title,
+  // )
+
+  const successResponse = {
+    message: "success",
+    newBook: newBook,
+  };
+
+  response.send(successResponse);
+});
 
 app.listen(5001, () => {
   console.log("Server is listening");
