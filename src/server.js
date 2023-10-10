@@ -50,17 +50,13 @@ app.get("/books", (request, response) => {
   response.send(successResponse);
 });
 
-app.post("/books", (request, response) => {
-  console.log(request.body.title);
-  const newBook = {
+app.post("/books", async (request, response) => {
+  const newBook = await Book.create({
     title: request.body.title,
     author: request.body.author,
     genre: request.body.genre,
-  };
-
-  // create a book on the db(
-  //  title: request.body.title,
-  // )
+  });
+  console.log(typeof newBook, newBook);
 
   const successResponse = {
     message: "success",
