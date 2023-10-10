@@ -61,6 +61,31 @@ app.post("/books", async (request, response) => {
   response.send(successResponse);
 });
 
+app.put("/books", async (request, response) => {
+  const update = await Book.updateOne(
+    { title: request.body.title },
+    { author: request.body.newAuthor }
+  );
+
+  const successResponse = {
+    message: "success",
+    update: update,
+  };
+
+  response.send(successResponse);
+});
+
+app.delete("/books", async (request, response) => {
+  const deletion = await Book.deleteOne({ title: request.body.title });
+
+  const successResponse = {
+    message: "success",
+    deletion: deletion,
+  };
+
+  response.send(successResponse);
+});
+
 app.listen(5001, () => {
   console.log("Server is listening");
 });
