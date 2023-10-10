@@ -34,17 +34,12 @@ const bookSchema = new mongoose.Schema({
 
 const Book = mongoose.model("book", bookSchema);
 
-app.get("/books", (request, response) => {
-  console.log(request.originalUrl);
-  const book = {
-    title: "lord of the rings",
-    author: "tolkein",
-    genre: "fantasy",
-  };
+app.get("/books", async (request, response) => {
+  const books = await Book.find();
 
   const successResponse = {
     message: "success",
-    book: book,
+    books: books,
   };
 
   response.send(successResponse);
