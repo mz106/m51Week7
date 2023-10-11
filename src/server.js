@@ -62,10 +62,13 @@ app.post("/books", async (request, response) => {
 });
 
 app.put("/books", async (request, response) => {
-  const update = await Book.updateOne(
+  const update = await Book.findOneAndUpdate(
     { title: request.body.title },
-    { author: request.body.newAuthor }
+    { author: request.body.author },
+    { returnDocument: "after" }
   );
+
+  console.log("update: ", update);
 
   const successResponse = {
     message: "success",

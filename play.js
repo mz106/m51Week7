@@ -41,10 +41,21 @@
 // console.log(process.env.MY_NAME);
 // console.log(process.env.I_LIKE_CHEESE);
 
-const var1 = true;
-const var2 = ["hello"];
-const var3 = "hello world";
+// const var1 = true;
+// const var2 = ["hello"];
+// const var3 = "hello world";
 
-console.log(typeof var1, var1);
-console.log(typeof var2, var2);
-console.log(typeof var3, var3);
+// console.log(typeof var1, var1);
+// console.log(typeof var2, var2);
+// console.log(typeof var3, var3);
+
+// const myArr = ["hello", "world"];
+
+const key = "car";
+const value = "ford";
+
+const myObj = {
+  [key]: value,
+};
+
+console.log(myObj);
