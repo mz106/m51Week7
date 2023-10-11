@@ -1,40 +1,89 @@
+require("dotenv").config();
 const express = require("express");
+
+const mongoose = require("mongoose");
 
 const app = express();
 
 app.use(express.json());
 
-app.get("/books", (request, response) => {
-  console.log(request.originalUrl);
-  const book = {
-    title: "lord of the rings",
-    author: "tolkein",
-    genre: "fantasy",
-  };
+async function connection() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Successfully connected");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+connection();
+
+const bookSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  author: {
+    type: String,
+  },
+  genre: {
+    type: String,
+  },
+});
+
+const Book = mongoose.model("book", bookSchema);
+
+app.get("/books", async (request, response) => {
+  const books = await Book.find();
 
   const successResponse = {
     message: "success",
-    book: book,
+    books: books,
   };
 
   response.send(successResponse);
 });
 
-app.post("/books", (request, response) => {
-  console.log(request.body.title);
-  const newBook = {
+app.post("/books", async (request, response) => {
+  const newBook = await Book.create({
     title: request.body.title,
     author: request.body.author,
     genre: request.body.genre,
-  };
-
-  // create a book on the db(
-  //  title: request.body.title,
-  // )
+  });
+  console.log(typeof newBook, newBook);
 
   const successResponse = {
     message: "success",
     newBook: newBook,
+  };
+
+  response.send(successResponse);
+});
+
+app.put("/books", async (request, response) => {
+  const update = await Book.findOneAndUpdate(
+    { title: request.body.title },
+    { author: request.body.author },
+    { returnDocument: "after" }
+  );
+
+  console.log("update: ", update);
+
+  const successResponse = {
+    message: "success",
+    update: update,
+  };
+
+  response.send(successResponse);
+});
+
+app.delete("/books", async (request, response) => {
+  const deletion = await Book.deleteOne({ title: request.body.title });
+
+  const successResponse = {
+    message: "success",
+    deletion: deletion,
   };
 
   response.send(successResponse);
